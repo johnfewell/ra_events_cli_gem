@@ -5,31 +5,22 @@
 class RAEventsCliGem::CLI
 
   def call
-    puts "Welcome to the RA Events listing"
     list_cities
+    menu
     #menu
     #menu2
   end
 
   def list_cities
+    puts "Welcome to the RA Events listing"
     puts "+------------------------------------------------------------------------------------------------------+"
     puts "|1. London, UK        |2. Berlin, DE       |3. Paris, FR       |4. Switzerland   |5. New York, US      |"
     puts "|6. Amsterdam, NL     |7. Tokyo, JP        |8. Ibiza, ES       |9. Barcelona, ES |10. South + East, UK |"
     puts "+------------------------------------------------------------------------------------------------------+"
   end
 
-  def list_dates(input)
-
-    puts ""
-  end
-
-  def ten_day_forecast
-    @weather.days_temps
-    puts "=---=---=---=---=---=---=---=---=---=---=---="
-    puts @weather.week_summary
-    puts "=---=---=---=---=---=---=---=---=---=---=---="
-    puts @weather.days_array.transpose.map {|x| x.join(" ")}.join("\n")
-    puts "=---=---=---=---=---=---=---=---=---=---=---="
+  def list_dates
+    @events = RAEventsCliGem::Events.all
   end
 
   def menu
@@ -39,9 +30,19 @@ class RAEventsCliGem::CLI
       input = gets.strip.downcase
       if input == "exit"
         exit
+      elsif
+        input.to_i > 10
+          puts "Must be between 1 and 10"
+          menu
       else
-        input.to_i!
-        list_dates(input)
+        input.to_i
+        #send input to scraper and scrape events in given city
+        list_dates
+        input = gets.strip.downcase
+
+        input.to_i > 7
+          puts "Must be between 1 and 7"
+          menu
       end
         puts "Do you want the 8 day forecast for this location? y/n"
         input = gets.strip.downcase
