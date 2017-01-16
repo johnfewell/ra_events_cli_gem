@@ -12,21 +12,27 @@ class RAEventsCliGem::CLI
   end
 
   def list_cities
-    puts "Welcome to the RA Events listing"
-    puts "+------------------------------------------------------------------------------------------------------+"
-    puts "|1. London, UK        |2. Berlin, DE       |3. Paris, FR       |4. Switzerland   |5. New York, US      |"
-    puts "|6. Amsterdam, NL     |7. Tokyo, JP        |8. Ibiza, ES       |9. Barcelona, ES |10. South + East, UK |"
-    puts "+------------------------------------------------------------------------------------------------------+"
+    puts <<-DOC
+    ██▀███   ▄▄▄       Welcome to the RA Events listing
+   ▓██ ▒ ██▒▒████▄     +-------------------+----------------+---------------+------------------+----------------------+
+   ▓██ ░▄█ ▒▒██  ▀█▄   | 1. London, UK     | 2. Berlin, DE  | 3. Paris, FR  | 4. Switzerland   | 5. New York, US      |
+   ▒██▀▀█▄  ░██▄▄▄▄██  | 6. Amsterdam, NL  | 7. Tokyo, JP   | 8. Ibiza, ES  | 9. Barcelona, ES | 10. South + East, UK |
+   ░██▓ ▒██▒ ▓█   ▓██▒ +-------------------+----------------+---------------+------------------+-----------+----------+
+   ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+     ░▒ ░ ▒░  ▒   ▒▒ ░
+     ░░   ░   ░   ▒
+      ░           ░  ░
+    DOC
   end
 
   def list_dates
     @dates = []
     t = Time.now
     @dates << t
-    6.times {@dates << t += 86400}
+    13.times {@dates << t += 86400}
     counter = 1
     @dates.each do |d|
-      puts "#{counter}. #{d.strftime("%m/%d/%Y")}"
+      puts "#{counter}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
       counter += 1
     end
     cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3, "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6, "Tokyo, JP" => 7, "Ibiza, ES" => 8, "Barcelona, ES" => 9, "South + East, UK" => 10}
@@ -40,13 +46,22 @@ class RAEventsCliGem::CLI
     RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
     RAEventsCliGem::Events.all.each.with_index(0) do |event, index|
       puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending."
-    end  
+    end
   end
 
   def list_single_event(event_number)
     event = RAEventsCliGem::Events.all[event_number-1]
-    puts "#{event.title} at #{event.venue} | #{event.attendees} RA members attending."
-    puts "#{event.price} #{event.sale_close} | #{event.desc} #{event.lineup}"
+    puts ""
+    puts event.title
+    puts "~" * event.title.size
+    puts "At #{event.venue}"
+    puts "#{event.attendees} RA members attending."
+    puts event.price 
+    puts event.sale_close
+    puts "Lineup:" 
+    puts event.lineup
+    puts ""
+    puts event.desc 
   end
 
   def menu
@@ -67,7 +82,7 @@ class RAEventsCliGem::CLI
         #send input to scraper and scrape events in given city
         list_dates
         input = gets.strip.downcase
-        if input.to_i > 7
+        if input.to_i > 14
           puts "Must be between 1 and 7"
           menu
         else

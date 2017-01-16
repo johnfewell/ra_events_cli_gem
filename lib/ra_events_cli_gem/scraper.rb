@@ -21,7 +21,6 @@ class RAEventsCliGem::Scraper
     scrape_events.each do |e| 
       RAEventsCliGem::Events.new_event(e)
     end  
-
   end
 
 end
