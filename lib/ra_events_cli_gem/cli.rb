@@ -1,27 +1,21 @@
-# Ask user what city they want to see evetns in
-# Show list of events in that city, Ask if they want to see the detail of any of the events or exit
-# Show detail of event, ask if they want to return to the previous menu or exit
-
 class RAEventsCliGem::CLI
 
   def call
-
     menu
-    #menu
-    #menu2
   end
 
   def list_cities
     puts <<-DOC
     ██▀███   ▄▄▄       Welcome to the RA Events listing
-   ▓██ ▒ ██▒▒████▄     +-------------------+----------------+---------------+------------------+----------------------+
-   ▓██ ░▄█ ▒▒██  ▀█▄   | 1. London, UK     | 2. Berlin, DE  | 3. Paris, FR  | 4. Switzerland   | 5. New York, US      |
-   ▒██▀▀█▄  ░██▄▄▄▄██  | 6. Amsterdam, NL  | 7. Tokyo, JP   | 8. Ibiza, ES  | 9. Barcelona, ES | 10. South + East, UK |
-   ░██▓ ▒██▒ ▓█   ▓██▒ +-------------------+----------------+---------------+------------------+-----------+----------+
-   ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░
+   ▓██ ▒ ██▒▒████▄     +------------------+------------------+---------------+----------------+
+   ▓██ ░▄█ ▒▒██  ▀█▄   | 1. London, UK    | 2. Berlin, DE    | 3. Paris, FR  | 4. Switzerland |
+   ▒██▀▀█▄  ░██▄▄▄▄██  | 5. New York, US  | 6. Amsterdam, NL | 7. Tokyo, JP  | 8. Ibiza, ES   |
+   ░██▓ ▒██▒ ▓█   ▓██▒ | 9. Barcelona, ES | 10. South + East, UK                              |
+   ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░ +----------------------------------------------------------------------+
      ░▒ ░ ▒░  ▒   ▒▒ ░
-     ░░   ░   ░   ▒
+     ░░   ░   ░   ▒     Choose a city's number to see current events there. (type exit to quit)
       ░           ░  ░
+
     DOC
   end
 
@@ -35,7 +29,10 @@ class RAEventsCliGem::CLI
       puts "#{counter}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
       counter += 1
     end
-    cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3, "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6, "Tokyo, JP" => 7, "Ibiza, ES" => 8, "Barcelona, ES" => 9, "South + East, UK" => 10}
+    cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3,
+                "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6,
+                "Tokyo, JP" => 7, "Ibiza, ES" => 8, "Barcelona, ES" => 9,
+                "South + East, UK" => 10}
     puts "Choose a date to see the events on that day in #{cli_city.key(@city.to_i)}."
   end
 
@@ -52,24 +49,43 @@ class RAEventsCliGem::CLI
   def list_single_event(event_number)
     event = RAEventsCliGem::Events.all[event_number-1]
     puts ""
+    puts ""
     puts event.title
     puts "~" * event.title.size
-    puts "At #{event.venue}"
-    puts "#{event.attendees} RA members attending."
-    puts event.price 
-    puts event.sale_close
-    puts "Lineup:" 
+    puts "At #{event.venue}  /  #{event.attendees} RA members attending."
+    puts "~" * (event.venue.size + 3) + "     " + "~" * (event.attendees.size + 21)
+    puts event.price unless  event.price == ""
+    puts "~" * event.price.size unless event.price == ""
+    puts "Lineup:"
+    puts ""
     puts event.lineup
     puts ""
-    puts event.desc 
+    puts reformat_wrapped(event.desc)
   end
+
+  def reformat_wrapped(s, width=78)
+	  lines = []
+	  line = ""
+	  s.split(/\s+/).each do |word|
+	    if line.size + word.size >= width
+	      lines << line
+	      line = word
+	    elsif line.empty?
+	     line = word
+	    else
+	     line << " " << word
+	   end
+	   end
+	   lines << line if line
+	  return lines.join "\n"
+	end
+
 
   def menu
     RAEventsCliGem::Events.clear
     list_cities
       input = nil
       while input != "exit"
-      puts "Choose a city to see current events there. (type exit to quit)"
       input = gets.strip.downcase
       if input == "exit"
         exit

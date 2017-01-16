@@ -4,7 +4,7 @@
 require 'pry'
 
 class RAEventsCliGem::Events
-attr_accessor :url, :title, :venue, :attendees, :price, :sale_close, :desc, :lineup
+attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
 
   @@all = []
 
@@ -49,16 +49,14 @@ attr_accessor :url, :title, :venue, :attendees, :price, :sale_close, :desc, :lin
     'Early' => ' - Early',
     'Extra' => ' - Extra',
     'Final' => ' - Final',
-    'bird' => 'bird. ',    
+    'Super' => ' - Super',
+    'VIP' => ' - VIP',
+    'bird' => 'bird. ',
     'release ' => 'release. ',
-    'release' => 'release. '    
+    'release' => 'release. '
     }
     matcher = /#{replacement_rules.keys.join('|')}/
     @price = raw_price.gsub(matcher, replacement_rules)
-  end
-
-  def sale_close
-    @sale_close = @doc.xpath("//p[@id='tickets-info']").text.strip
   end
 
   def desc
