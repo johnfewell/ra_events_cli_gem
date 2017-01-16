@@ -22,6 +22,10 @@ attr_accessor :url, :title, :venue, :attendees, :price, :sale_close, :desc, :lin
     @@all
   end
 
+  def self.clear
+    @@all.clear
+  end
+
   def title
       @title =  @doc.xpath("//div[@id='sectionHead']//h1").text
     #  binding.pry

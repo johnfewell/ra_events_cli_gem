@@ -4,10 +4,8 @@
 
 class RAEventsCliGem::CLI
 
-
-
   def call
-    list_cities
+
     menu
     #menu
     #menu2
@@ -32,7 +30,7 @@ class RAEventsCliGem::CLI
       counter += 1
     end
     cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3, "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6, "Tokyo, JP" => 7, "Ibiza, ES" => 8, "Barcelona, ES" => 9, "South + East, UK" => 10}
-    puts "Choose a date to see the events on that day in #{cli_city.key(@city.to_i)}"
+    puts "Choose a date to see the events on that day in #{cli_city.key(@city.to_i)}."
   end
 
   def list_events
@@ -40,12 +38,20 @@ class RAEventsCliGem::CLI
     month = @input_date.strftime("%m")
     day = @input_date.strftime("%d")
     RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
-    RAEventsCliGem::Events.all[0, 10].each.with_index(0) do |event, index|
-      puts "#{index}. #{event.title} at #{event.venue}"
+    RAEventsCliGem::Events.all.each.with_index(0) do |event, index|
+      puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending."
     end  
   end
 
+  def list_single_event(event_number)
+    event = RAEventsCliGem::Events.all[event_number-1]
+    puts "#{event.title} at #{event.venue} | #{event.attendees} RA members attending."
+    puts "#{event.price} #{event.sale_close} | #{event.desc} #{event.lineup}"
+  end
+
   def menu
+    RAEventsCliGem::Events.clear
+    list_cities
       input = nil
       while input != "exit"
       puts "Choose a city to see current events there. (type exit to quit)"
@@ -69,14 +75,17 @@ class RAEventsCliGem::CLI
           list_events
         end
       end
-        puts "Do you want the 8 day forecast for this location? y/n"
+        puts "Choose an event number to get more detail, or type exit."
         input = gets.strip.downcase
-        if input == "y"
-          ten_day_forecast
-        elsif input == "n"
-          puts "Do you want to exit? y/n"
+        if input == "exit"
+          exit
+        elsif input.to_i.is_a? Integer
+          list_single_event(input.to_i)
           input = gets.strip.downcase
-          if input == "y"
+          puts "Type list to go back to the list or exit"
+          if input == "list"
+            list_events
+          elsif input == "exit"
             exit
           else
             menu

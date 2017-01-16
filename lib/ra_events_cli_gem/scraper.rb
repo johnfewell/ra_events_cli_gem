@@ -10,7 +10,7 @@ class RAEventsCliGem::Scraper
   end 
 
   def scrape_events
-    self.get_page.css("div#event-listing li")
+    self.get_page.css("div#event-listing li h1")
   end
 
   def make_events(city, year, month, day)
