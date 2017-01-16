@@ -4,6 +4,8 @@
 
 class RAEventsCliGem::CLI
 
+
+
   def call
     list_cities
     menu
@@ -29,8 +31,8 @@ class RAEventsCliGem::CLI
       puts "#{counter}. #{d.strftime("%m/%d/%Y")}"
       counter += 1
     end
-    puts "Choose a date to see the events on that day in New York"
-
+    cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3, "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6, "Tokyo, JP" => 7, "Ibiza, ES" => 8, "Barcelona, ES" => 9, "South + East, UK" => 10}
+    puts "Choose a date to see the events on that day in #{cli_city.key(@city.to_i)}"
   end
 
   def list_events
