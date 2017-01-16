@@ -39,9 +39,10 @@ class RAEventsCliGem::CLI
     year = @input_date.strftime("%Y")
     month = @input_date.strftime("%m")
     day = @input_date.strftime("%d")
-
     RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
-    # @events = RAEventsCliGem::Events.all(@city, year, month, day)
+    RAEventsCliGem::Events.all[0, 10].each.with_index(0) do |event, index|
+      puts "#{index}. #{event.title} at #{event.venue}"
+    end  
   end
 
   def menu

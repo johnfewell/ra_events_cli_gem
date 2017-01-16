@@ -23,32 +23,32 @@ attr_accessor :url, :title, :venue, :attendees, :price, :sale_close, :desc, :lin
   end
 
   def title
-    @title =  @doc.xpath("//div[@id='sectionHead']//h1]").text
+      @title =  @doc.xpath("//div[@id='sectionHead']//h1").text
+    #  binding.pry
   end
 
   def venue
-    @venue = (//li[@class='wide']//a)[1]
+    @venue = @doc.xpath("(//li[@class='wide']//a)[1]").text
   end
 
   def attendees
-    @attendees = //h1[@id='MembersFavouriteCount']
+    @attendees = @doc.xpath("//h1[@id='MembersFavouriteCount']").text
   end
 
   def price
-    @price = //li[@id='tickets']//li
+    @price = @doc.xpath("//li[@id='tickets']//li").text
   end
 
   def sale_close
-    @sale_close = //p[@id='tickets-info']
+    @sale_close = @doc.xpath("//p[@id='tickets-info']").text
   end
 
   def desc
-    @desc = (//div[@class='left']//p)[2]
+    @desc = @doc.xpath("(//div[@class='left']//p)[2]").text.strip
   end
 
   def lineup
-    @lineup = //p[@class='lineup large']
+    @lineup = @doc.xpath("//p[@class='lineup large']").text
   end
-
 
 end
