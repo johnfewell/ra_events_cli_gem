@@ -27,15 +27,15 @@ attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
   end
 
   def title
-      @title = @doc.xpath("//div[@id='sectionHead']//h1").text
+      @title ||= @doc.xpath("//div[@id='sectionHead']//h1").text
   end
 
   def venue
-    @venue = @doc.xpath("(//li[@class='wide']//a)[1]").text
+    @venue ||= @doc.xpath("(//li[@class='wide']//a)[1]").text
   end
 
   def attendees
-    @attendees = @doc.xpath("//h1[@id='MembersFavouriteCount']").text
+    @attendees ||= @doc.xpath("//h1[@id='MembersFavouriteCount']").text
   end
 
   def price
@@ -47,6 +47,7 @@ attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
     '4th' => ' - 4th',
     '5th' => ' - 5th',
     'Early' => ' - Early',
+    'Advance' => ' - Advance',
     'Extra' => ' - Extra',
     'Final' => ' - Final',
     'Super' => ' - Super',
@@ -56,18 +57,18 @@ attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
     'release' => 'release. '
     }
     matcher = /#{replacement_rules.keys.join('|')}/
-    @price = raw_price.gsub(matcher, replacement_rules)
+    @price ||= raw_price.gsub(matcher, replacement_rules)
   end
 
   def desc
-    @desc = @doc.xpath("(//div[@class='left']//p)[2]").text.strip
+    @desc ||= @doc.xpath("(//div[@class='left']//p)[2]").text.strip
   end
 
   def lineup
     if @doc.xpath("//p[@class='lineup large']").text.strip == ""
-      @lineup = @doc.xpath("//p[@class='lineup medium']").text.strip
+      @lineup ||= @doc.xpath("//p[@class='lineup medium']").text.strip
     else
-      @lineup = @doc.xpath("//p[@class='lineup large']").text.strip
+      @lineup ||= @doc.xpath("//p[@class='lineup large']").text.strip
     end
   end
 
