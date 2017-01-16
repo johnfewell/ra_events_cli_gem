@@ -20,7 +20,26 @@ class RAEventsCliGem::CLI
   end
 
   def list_dates
-    @events = RAEventsCliGem::Events.all
+    @dates = []
+    t = Time.now
+    @dates << t
+    6.times {@dates << t += 86400}
+    counter = 1
+    @dates.each do |d|
+      puts "#{counter}. #{d.strftime("%m/%d/%Y")}"
+      counter += 1
+    end
+    puts "Choose a date to see the events on that day in New York"
+
+  end
+
+  def list_events
+    year = @input_date.strftime("%Y")
+    month = @input_date.strftime("%m")
+    day = @input_date.strftime("%d")
+
+    RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
+    # @events = RAEventsCliGem::Events.all(@city, year, month, day)
   end
 
   def menu
@@ -35,14 +54,17 @@ class RAEventsCliGem::CLI
           puts "Must be between 1 and 10"
           menu
       else
-        input.to_i
+        @city = input.to_i
         #send input to scraper and scrape events in given city
         list_dates
         input = gets.strip.downcase
-
-        input.to_i > 7
+        if input.to_i > 7
           puts "Must be between 1 and 7"
           menu
+        else
+          @input_date = @dates[input.to_i-1]
+          list_events
+        end
       end
         puts "Do you want the 8 day forecast for this location? y/n"
         input = gets.strip.downcase

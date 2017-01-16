@@ -6,11 +6,8 @@ require 'date'
 
 class RAEventsCliGem::Events
 
-  attr_accessor :city, :year, :month, :day
 
-  @@base_url = "https://www.residentadvisor.net/events.aspx?ai="
-  #?ai=8&v=day&mn=1&yr=2017&dy=15
-  @@cities = {1 => 13, 2 => 34, 3 => 44, 5 => 8, 4 => 60, 6 => 29, 7 => 27, 8 => 24, 9 => 20, 10 => 15}
+
 
   def initialize
 
