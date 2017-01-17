@@ -2,6 +2,8 @@ require 'pry'
 
 class RAEventsCliGem::Scraper
   attr_accessor :city, :year, :month, :day
+  #I know this is confusing, this is the URL parameters for each city and their 
+  #index number from the first menu
   @@cities = {13 => 1, 34 => 2, 44 => 3, 60 => 4, 8 => 5, 29 => 6, 27 => 7, 24 => 8, 20 => 9, 15 => 10}
 
   def get_page

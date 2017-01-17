@@ -25,6 +25,7 @@ class RAEventsCliGem::CLI
     @dates << t
     13.times {@dates << t += 86400}
     counter = 1
+    #sandwich code? use collect instead?
     @dates.each do |d|
       puts "#{counter}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
       counter += 1
@@ -87,6 +88,22 @@ class RAEventsCliGem::CLI
 	  return lines.join "\n"
 	end
 
+  def menu
+    RAEventsCliGem::Events.clear
+    list_cities
+      input = nil
+      while input != "exit"
+        input = gets.strip.downcase
+        if input.to_i.between?(1,10)
+          @city = input.to_i
+          menu2
+        else
+          puts "I don't know what you mean, either type exit or choose a city"
+          menu
+        end
+      end
+  end
+
   def menu2
     input = nil
     while input != "exit"
@@ -133,28 +150,12 @@ class RAEventsCliGem::CLI
       end
   end
 
-  def menu
-    RAEventsCliGem::Events.clear
-    list_cities
-      input = nil
-      while input != "exit"
-        input = gets.strip.downcase
-        if input.to_i.between?(1,10)
-          @city = input.to_i
-          menu2
-        else
-          puts "I don't know what you mean, either type exit or choose a city"
-          menu
-        end
-      end
+  def goodbye
+    puts <<-DOC
+     ______  _____   _____  ______       ______  __   __ _______   /
+    |  ____ |     | |     | |     \      |_____]   \_/   |______  /
+    |_____| |_____| |_____| |_____/      |_____]    |    |______ .
+    DOC
   end
-
-    def goodbye
-      puts <<-DOC
-       ______  _____   _____  ______       ______  __   __ _______   /
-      |  ____ |     | |     | |     \      |_____]   \_/   |______  /
-      |_____| |_____| |_____| |_____/      |_____]    |    |______ .
-      DOC
-    end
 
 end
