@@ -2,11 +2,10 @@ class RAEventsCliGem::CLI
 
   def call
     menu
-    goodbye
   end
 
   def list_cities
-    puts <<-DOC
+    puts <<~DOC
     ██▀███   ▄▄▄       Welcome to the RA Events listing
    ▓██ ▒ ██▒▒████▄     +------------------+------------------+---------------+----------------+
    ▓██ ░▄█ ▒▒██  ▀█▄   | 1. London, UK    | 2. Berlin, DE    | 3. Paris, FR  | 4. Switzerland |
@@ -68,7 +67,8 @@ class RAEventsCliGem::CLI
     puts event.lineup
     puts ""
     puts reformat_wrapped(event.desc)
-    puts "+" * 78
+    puts ""
+    puts "-" * 78
   end
 
   def reformat_wrapped(s, width=78)
@@ -90,72 +90,84 @@ class RAEventsCliGem::CLI
 
   def menu
     RAEventsCliGem::Events.clear
+    input = nil
     list_cities
-      input = nil
-      while input != "exit"
-        input = gets.strip.downcase
-        if input.to_i.between?(1,10)
-          @city = input.to_i
-          menu2
-        else
-          puts "I don't know what you mean, either type exit or choose a city"
-          menu
-        end
-      end
+    input = gets.strip.downcase
+    if input.to_i.between?(1,10)
+      @city = input.to_i
+      menu2
+    elsif input == 'exit'
+      goodbye
+    else
+      puts "I don't know what you mean, either type exit or choose a city"
+      puts "Press any key to continue"
+      gets
+      menu
+    end
   end
 
   def menu2
     input = nil
-    while input != "exit"
-      list_dates
-      input = gets.strip.downcase
-      if input.to_i.between?(1,14)
-        @input_date = @dates[input.to_i-1]
-        #list_events
-        create_events
-        if RAEventsCliGem::Events.all.count == 0
-          puts "No events on that date!"
-          puts "Press any key to continue"
-          gets
-          menu2
-        else
-          menu3
-        end
+    list_dates
+    input = gets.strip.downcase
+    if input.to_i.between?(1,@dates.size)
+      @input_date = @dates[input.to_i-1]
+      create_events
+      if RAEventsCliGem::Events.all.count == 0
+        puts "No events on that date!"
+        puts "Press any key to continue"
+        gets
+        menu2
+      else
+        menu3
       end
+    elsif input == 'exit'
+      goodbye
+    elsif input == 'start'
+      menu
     end
   end
 
   def menu3
     input = nil
-    while input != "exit"
-      list_events
-      puts "Choose an event number to get more detail, or type exit."
-      input = gets.strip.downcase
-      if input.to_i.between?(1,RAEventsCliGem::Events.all.count)
-        list_single_event(input.to_i)
-        puts "Choose 'list' to return to the list, 'date' to search another date in this city, 'start' to restart, or type exit"
-        input = gets.strip.downcase
-          if input == "list"
-            menu3
-          elsif input == "date"
-            RAEventsCliGem::Events.clear
-            menu2
-          elsif input == "start"
-            menu
-          else
-            puts "Not sure what you mean."
-            puts "Choose 'list' to return to the list, 'date' to search another date in this city, 'start' to restart, or type exit"
-          end
-        end
-      end
+    list_events
+    puts "Choose an event number to get more detail, or type exit."
+    input = gets.strip.downcase
+    if input.to_i.between?(1,RAEventsCliGem::Events.all.count)
+      list_single_event(input.to_i)
+    elsif input == 'start'
+      menu
+    elsif input == 'exit'
+      goodbye
+    else
+      puts "Not sure what you mean."
+      menu3
+    end
+    puts "Choose 'list' to return to the list, 'date' to search another date in this"
+    puts "city, 'start' to restart, or type exit"
+    input = gets.strip.downcase
+    if input == "list"
+      menu3
+    elsif input == "date"
+      RAEventsCliGem::Events.clear
+      menu2
+    elsif input == "start"
+      menu
+    elsif input == 'exit'
+      goodbye
+    else
+      puts "Not sure what you mean."
+    end
   end
 
   def goodbye
     puts <<-DOC
-     ______  _____   _____  ______       ______  __   __ _______   /
-    |  ____ |     | |     | |     \      |_____]   \_/   |______  /
-    |_____| |_____| |_____| |_____/      |_____]    |    |______ .
+    _
+   / _  _   _   _ ) ( _         _  |
+  (__/ (_) (_) (_(   )_) (_(   )_) o
+                           _) (_
     DOC
+    exit
   end
 
 end
