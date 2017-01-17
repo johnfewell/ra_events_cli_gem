@@ -36,19 +36,19 @@ class RAEventsCliGem::CLI
     puts "Choose a date to see the events on that day in #{@cli_city.key(@city.to_i)}."
   end
 
+  def create_events
+    year = @input_date.strftime("%Y")
+    month = @input_date.strftime("%m")
+    day = @input_date.strftime("%d")
+    RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
+  end
+
   def list_events
-    if RAEventsCliGem::Events.all.count > 0
-      RAEventsCliGem::Events.all.each.with_index(0) do |event, index|
-        puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending."
-      end
+    if RAEventsCliGem::Events.all.any?
+      RAEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
     else
-      year = @input_date.strftime("%Y")
-      month = @input_date.strftime("%m")
-      day = @input_date.strftime("%d")
-      RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
-      RAEventsCliGem::Events.all.each.with_index(0) do |event, index|
-        puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending."
-      end
+      create_events
+      RAEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
     end
   end
 
@@ -94,7 +94,8 @@ class RAEventsCliGem::CLI
       input = gets.strip.downcase
       if input.to_i.between?(1,14)
         @input_date = @dates[input.to_i-1]
-        list_events
+        #list_events
+        create_events
         if RAEventsCliGem::Events.all.count == 0
           puts "No events on that date!"
           puts "Press any key to continue"
@@ -120,6 +121,7 @@ class RAEventsCliGem::CLI
           if input == "list"
             menu3
           elsif input == "date"
+            RAEventsCliGem::Events.clear
             menu2
           elsif input == "start"
             menu
