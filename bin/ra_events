@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
 require './lib/ra_events_cli_gem'
 
-RAEventsCliGem::CLI.new.call
-
-  
+RaEventsCliGem::CLI.new.call

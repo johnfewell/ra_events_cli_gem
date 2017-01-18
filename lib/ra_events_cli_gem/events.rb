@@ -1,6 +1,6 @@
 require 'pry'
 
-class RAEventsCliGem::Events
+class RaEventsCliGem::Events
 attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
 
   @@all = []

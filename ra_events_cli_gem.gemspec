@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'darksky_cli_app/version'
+require 'ra_events_cli_gem/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ra_events_cli_gem"
-  spec.version       = RAEventsCliGem::VERSION
+  spec.version       = RaEventsCliGem::VERSION
   spec.authors       = ["John Fewell"]
   spec.email         = ["fewell@gmail.com"]
 
-  spec.summary       = %q{Scrapes the weather from darksky.net for a given location.}
+  spec.summary       = %q{Scrapes events from Residentadvisor.net for it's list of the top 10 cities in the world.}
   spec.description   = %q{Using Nokogiri and Geocoder}
-  spec.homepage      = "https://github.com/johnfewell/darksky-cli-app"
+  spec.homepage      = "https://github.com/johnfewell/ra_events_cli_gem"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

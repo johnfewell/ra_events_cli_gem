@@ -1,6 +1,6 @@
 require 'pry'
 
-class RAEventsCliGem::Scraper
+class RaEventsCliGem::Scraper
   attr_accessor :city, :year, :month, :day
   #I know this is confusing, this is the URL parameters for each city and their
   #index number from the first menu
@@ -21,7 +21,7 @@ class RAEventsCliGem::Scraper
     @month = month
     @day = day
     scrape_events.each do |e|
-      RAEventsCliGem::Events.new_event(e)
+      RaEventsCliGem::Events.new_event(e)
     end
   end
 
