@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Scrapes events from Residentadvisor.net for it's list of the top 10 cities in the world.}
   spec.homepage      = "https://github.com/johnfewell/ra_events_cli_gem"
   spec.license       = "MIT"
-  spec.files         = ["lib/ra_events_cli_gem/cli.rb", "lib/ra_events_cli_gem/events.rb", "lib/ra_events_cli_gem/scraper.rb", "lib/ra_events_cli_gem/version.rb", "lib/ra_events_cli_gem.rb"]
+#  spec.files         = ["lib/ra_events_cli_gem/cli.rb", "lib/ra_events_cli_gem/events.rb", "lib/ra_events_cli_gem/scraper.rb", "lib/ra_events_cli_gem/version.rb", "lib/ra_events_cli_gem.rb"]
 
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

@@ -20,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-
+Follow the on-screen prompts. 
 
 ## Development
 
