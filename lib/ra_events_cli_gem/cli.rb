@@ -1,4 +1,4 @@
-class RaEventsCliGem::CLI
+class RAEventsCliGem::CLI
 
   def call
     menu
@@ -23,8 +23,11 @@ class RaEventsCliGem::CLI
     t = Time.now
     @dates << t
     13.times {@dates << t += 86400}
-    @dates.each.with_index(1) do |d, i|
-      puts "#{i}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
+    counter = 1
+    #sandwich code? use collect instead?
+    @dates.each do |d|
+      puts "#{counter}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
+      counter += 1
     end
     @cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3,
                 "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6,
@@ -37,20 +40,20 @@ class RaEventsCliGem::CLI
     year = @input_date.strftime("%Y")
     month = @input_date.strftime("%m")
     day = @input_date.strftime("%d")
-    RaEventsCliGem::Scraper.new.make_events(@city, year, month, day)
+    RAEventsCliGem::Scraper.new.make_events(@city, year, month, day)
   end
 
   def list_events
-    if RaEventsCliGem::Events.all.any?
-      RaEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
+    if RAEventsCliGem::Events.all.any?
+      RAEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
     else
       create_events
-      RaEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
+      RAEventsCliGem::Events.all.each.with_index(0) { |event, index| puts "#{index+1}. #{event.title} at #{event.venue} | #{event.attendees} RA members attending." }
     end
   end
 
   def list_single_event(event_number)
-    event = RaEventsCliGem::Events.all[event_number-1]
+    event = RAEventsCliGem::Events.all[event_number-1]
     puts ""
     puts ""
     puts event.title
@@ -86,13 +89,10 @@ class RaEventsCliGem::CLI
 	end
 
   def menu
-    RaEventsCliGem::Events.clear
-    @input_dates = []
+    RAEventsCliGem::Events.clear
     input = nil
     list_cities
-    input = gets.gsub(/\s+/, "").downcase
-    input.include? ","
-      @input_dates = input.split(',')
+    input = gets.strip.downcase
     if input.to_i.between?(1,10)
       @city = input.to_i
       menu2
@@ -113,7 +113,7 @@ class RaEventsCliGem::CLI
     if input.to_i.between?(1,@dates.size)
       @input_date = @dates[input.to_i-1]
       create_events
-      if RaEventsCliGem::Events.all.count == 0
+      if RAEventsCliGem::Events.all.count == 0
         puts "No events on that date!"
         puts "Press any key to continue"
         gets
@@ -125,20 +125,15 @@ class RaEventsCliGem::CLI
       goodbye
     elsif input == 'start'
       menu
-    else
-      puts "Not sure what you mean."
-      puts "Press any key to continue"
-      gets
-      menu2
     end
   end
 
   def menu3
     input = nil
     list_events
-    puts "Choose an event number to get more detail, type start to restart, or type exit."
+    puts "Choose an event number to get more detail, or type exit."
     input = gets.strip.downcase
-    if input.to_i.between?(1,RaEventsCliGem::Events.all.count)
+    if input.to_i.between?(1,RAEventsCliGem::Events.all.count)
       list_single_event(input.to_i)
     elsif input == 'start'
       menu
@@ -146,8 +141,6 @@ class RaEventsCliGem::CLI
       goodbye
     else
       puts "Not sure what you mean."
-      puts "Press any key to continue"
-      gets
       menu3
     end
     puts "Choose 'list' to return to the list, 'date' to search another date in this"
@@ -156,7 +149,7 @@ class RaEventsCliGem::CLI
     if input == "list"
       menu3
     elsif input == "date"
-      RaEventsCliGem::Events.clear
+      RAEventsCliGem::Events.clear
       menu2
     elsif input == "start"
       menu
@@ -164,9 +157,6 @@ class RaEventsCliGem::CLI
       goodbye
     else
       puts "Not sure what you mean."
-      puts "Press any key to continue"
-      gets
-      menu3
     end
   end
 

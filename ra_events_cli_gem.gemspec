@@ -9,19 +9,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["John Fewell"]
   spec.email         = ["fewell@gmail.com"]
 
-  spec.summary       = %q{Scrapes events from Residentadvisor.net for it's list of the top 10 cities in the world.}
-  spec.description   = %q{Using Nokogiri and Geocoder}
+  spec.summary       = %q{Scrapes Residentadvisor.net using Nokogiri.}
+  spec.description   = %q{Scrapes events from Residentadvisor.net for it's list of the top 10 cities in the world.}
   spec.homepage      = "https://github.com/johnfewell/ra_events_cli_gem"
   spec.license       = "MIT"
+  spec.files         = ["lib/ra_events_cli_gem/cli.rb", "lib/ra_events_cli_gem/events.rb", "lib/ra_events_cli_gem/scraper.rb", "lib/ra_events_cli_gem/version.rb", "lib/ra_events_cli_gem.rb"]
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
