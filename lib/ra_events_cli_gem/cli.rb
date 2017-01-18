@@ -23,11 +23,8 @@ class RAEventsCliGem::CLI
     t = Time.now
     @dates << t
     13.times {@dates << t += 86400}
-    counter = 1
-    #sandwich code? use collect instead?
-    @dates.each do |d|
-      puts "#{counter}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
-      counter += 1
+    @dates.each.with_index(1) do |d, i|
+      puts "#{i}. #{d.strftime("%m/%d/%Y")} #{d.strftime('%A')}"
     end
     @cli_city = {"London, UK" => 1, "Berlin, DE" => 2, "Paris, FR" => 3,
                 "Switzerland" => 4, "New York, US" => 5, "Amsterdam, NL" => 6,
@@ -90,9 +87,12 @@ class RAEventsCliGem::CLI
 
   def menu
     RAEventsCliGem::Events.clear
+    @input_dates = []
     input = nil
     list_cities
-    input = gets.strip.downcase
+    input = gets.gsub(/\s+/, "").downcase
+    input.include? ","
+      @input_dates = input.split(',')
     if input.to_i.between?(1,10)
       @city = input.to_i
       menu2
@@ -125,13 +125,18 @@ class RAEventsCliGem::CLI
       goodbye
     elsif input == 'start'
       menu
+    else
+      puts "Not sure what you mean."
+      puts "Press any key to continue"
+      gets
+      menu2
     end
   end
 
   def menu3
     input = nil
     list_events
-    puts "Choose an event number to get more detail, or type exit."
+    puts "Choose an event number to get more detail, type start to restart, or type exit."
     input = gets.strip.downcase
     if input.to_i.between?(1,RAEventsCliGem::Events.all.count)
       list_single_event(input.to_i)
@@ -141,6 +146,8 @@ class RAEventsCliGem::CLI
       goodbye
     else
       puts "Not sure what you mean."
+      puts "Press any key to continue"
+      gets
       menu3
     end
     puts "Choose 'list' to return to the list, 'date' to search another date in this"
@@ -157,6 +164,9 @@ class RAEventsCliGem::CLI
       goodbye
     else
       puts "Not sure what you mean."
+      puts "Press any key to continue"
+      gets
+      menu3
     end
   end
 

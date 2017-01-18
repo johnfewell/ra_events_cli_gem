@@ -51,6 +51,7 @@ attr_accessor :url, :title, :venue, :attendees, :price, :desc, :lineup
     'VIP' => ' - VIP',
     'bird' => 'bird. ',
     'release ' => 'release. ',
+    'Release' => ' Release',
     'release' => 'release. '
     }
     matcher = /#{replacement_rules.keys.join('|')}/
